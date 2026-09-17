@@ -1,0 +1,93 @@
+interface Payment {
+    void pay(double amount);
+    void refund(double amount);
+}
+
+abstract class PaymentProcessor implements Payment {
+
+    protected String transactionId;
+
+    public PaymentProcessor(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public void printTransactionDetails() {
+        System.out.println("Transaction ID: " + transactionId);
+    }
+
+    // Common validation for all payment methods
+    protected boolean validateAmount(double amount) {
+        return amount > 0;
+    }
+}
+
+class CreditCardPayment extends PaymentProcessor {
+
+    public CreditCardPayment(String transactionId) {
+        super(transactionId);
+    }
+
+    @Override
+    public void pay(double amount) {
+        if (validateAmount(amount)) {
+            System.out.println("Paid ₹" + amount + " using Credit Card");
+        } else {
+            System.out.println("Invalid amount");
+        }
+    }
+
+    @Override
+    public void refund(double amount) {
+        if (validateAmount(amount)) {
+            System.out.println("Refunded ₹" + amount + " to Credit Card");
+        } else {
+            System.out.println("Invalid amount");
+        }
+    }
+}
+
+class UPIPayment extends PaymentProcessor {
+
+    public UPIPayment(String transactionId) {
+        super(transactionId);
+    }
+
+    @Override
+    public void pay(double amount) {
+        if (validateAmount(amount)) {
+            System.out.println("Paid ₹" + amount + " using UPI");
+        } else {
+            System.out.println("Invalid amount");
+        }
+    }
+
+    @Override
+    public void refund(double amount) {
+        if (validateAmount(amount)) {
+            System.out.println("Refunded ₹" + amount + " through UPI");
+        } else {
+            System.out.println("Invalid amount");
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        PaymentProcessor creditCard =
+                new CreditCardPayment("CC101");
+
+        PaymentProcessor upi =
+                new UPIPayment("UPI101");
+
+        creditCard.printTransactionDetails();
+        creditCard.pay(500);
+        creditCard.refund(100);
+
+        System.out.println();
+
+        upi.printTransactionDetails();
+        upi.pay(1000);
+        upi.refund(200);
+    }
+}
